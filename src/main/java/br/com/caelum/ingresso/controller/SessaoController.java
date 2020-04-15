@@ -12,7 +12,7 @@ import br.com.caelum.ingresso.dao.SalaDao;
 @Controller
 public class SessaoController {
 
-@Autowired
+@Autowired  //INJECT DEPENDENCIA
 private SalaDao salaDao;
 
 @Autowired
