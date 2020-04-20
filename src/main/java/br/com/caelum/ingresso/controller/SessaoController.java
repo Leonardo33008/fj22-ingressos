@@ -1,5 +1,7 @@
 package br.com.caelum.ingresso.controller;
 
+import java.util.List;
+
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +18,7 @@ import br.com.caelum.ingresso.dao.SalaDao;
 import br.com.caelum.ingresso.dao.SessaoDao;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
+import br.com.caelum.ingresso.valicacao.GerenciadorDeSessao;
 
 @Controller
 public class SessaoController {
@@ -42,9 +45,9 @@ public ModelAndView form(@RequestParam("salaId") Integer salaId, SessaoForm form
   }
 
 
-  @PostMapping(value = "/admin/sessao")
+  /*@PostMapping(value = "/admin/sessao")
   @Transactional
-  public ModelAndView salva(@Valid SessaoForm form, BindingResult result) {
+  public ModelAndView salva (@Valid SessaoForm form, BindingResult result){
     
     if (result.hasErrors()) return form(form.getSalaId(),form);
     
@@ -53,6 +56,26 @@ public ModelAndView form(@RequestParam("salaId") Integer salaId, SessaoForm form
     sessaoDao.save(sessao);
 
     return new ModelAndView("redirect:/admin/sala/" + form.getSalaId() + "/sessoes");
+  }*/
+
+  @PostMapping("/admin/sessao")
+  @Transactional
+  public ModelAndView salva(@Valid SessaoForm form, BindingResult result) {
+    if (result.hasErrors()) return form(form.getSalaId(), form);
+
+    Sessao sessao = form.toSessao(salaDao, filmeDao);
+
+    List<Sessao> sessoesDaSala = sessaoDao.buscaSessoesDaSala(sessao.getSala());
+
+    GerenciadorDeSessao gerenciador = new GerenciadorDeSessao(sessoesDaSala);
+
+    if (gerenciador.cabe(sessao)) {
+        sessaoDao.save(sessao);
+        return new ModelAndView("redirect:/admin/sala/" + form.getSalaId() + "/sessoes");
+    }
+    return form (form.getSalaId(), form);
+ 
   }
+ 
 
 }
