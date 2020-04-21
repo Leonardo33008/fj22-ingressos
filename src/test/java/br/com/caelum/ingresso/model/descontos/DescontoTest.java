@@ -27,5 +27,20 @@ public class DescontoTest {
 		
 		Assert.assertEquals(precoEsperado, ingresso.getPreco());
 	}
+	
+	@Test
+	public void deveConcederDescontoDe50PorcentoParaIngressoDeEstudante() {
+		
+		Sala sala = new Sala("Eldorado - IMAX", new BigDecimal("20.5"));
+		Filme filme = new Filme("Rogue One", Duration.ofMinutes(120),
+				"SCI-FI", new BigDecimal("12"));
+		Sessao sessao = new Sessao(LocalTime.parse("10:00:00"), filme, sala);
+		Ingresso ingresso = new Ingresso(sessao, new DescontoParaEstudantes());
+		
+		BigDecimal precoEsperado = new BigDecimal("16.25");
+		
+		Assert.assertEquals(precoEsperado, ingresso.getPreco());
+	}
+	
 
 }
