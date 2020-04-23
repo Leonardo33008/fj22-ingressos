@@ -14,7 +14,7 @@ import org.junit.Test;
 import br.com.caelum.ingresso.model.Filme;
 import br.com.caelum.ingresso.model.Sala;
 import br.com.caelum.ingresso.model.Sessao;
-import br.com.caelum.ingresso.valicacao.GerenciadorDeSessao;
+import br.com.caelum.ingresso.validacao.GerenciadorDeSessao;
 
 public class GerenciadorDeSessaoTest {
 
